@@ -2,6 +2,7 @@
 
 ## 19 DOCUMENTOS:
 ### 1 - contém todos os pokemos com suas características (doc principal);
+#### - características separdas por ";" e a cada linha um pokemon diferente;
 ### 2...19 - cada arquivo contém uma lista de pokemon de acordo com seu tipo;
 
 ## ARVORES:
