@@ -24,7 +24,7 @@ const rangeGetPokemon = async (min = 1, max = 1008) => {
     }
 };
 
-rangeGetPokemon(1, 10); // test case
+// rangeGetPokemon(1, 10); // test case
 
 getWeaknessesType = async (type) => {
     const response = await axios.get(`https://pokeapi.co/api/v2/type/${type}`);
@@ -49,6 +49,27 @@ rangeGetTypeWeakness = async (types) => {
     }
 }
 
-rangeGetTypeWeakness(typesPokemon); // test case
+// rangeGetTypeWeakness(typesPokemon); // test case
 
+getTypeStrong = async (type) => {
+    const response = await axios.get(`https://pokeapi.co/api/v2/type/${type}`);
+    const data = await response.data;
+    const typeStrong = await data.damage_relations.double_damage_to;
 
+    let Strong = [];
+
+    typeStrong.forEach((type) => {
+        Strong.push(type.name);
+    });
+
+    return Strong;
+};
+
+rangeGetTypeStrong = async (types) => { 
+    for (const type of types) {
+        const Strong = await getTypeStrong(type); 
+        console.log(type, Strong);
+    }
+}
+
+// rangeGetTypeStrong(typesPokemon); // test case
