@@ -9,16 +9,16 @@ const getAttributesPokemon = async (URL) => {
         name: data.name,
         type: data.types[0].type.name,
         xp: data.base_experience,
-        height: data.height / 10, // divide por 10 para realizar a conversão
-        weight: data.weight / 10, // divide por 10 para realizar a conversão
+        height: data.height / 10, 
+        weight: data.weight / 10, 
     };
 
-    return await attributesPokemon;
+    return attributesPokemon;
 };
 
 const rangeGetPokemon = async (min = 1, max = 1008) => {
-    for (let i = min; i <= max; i++) {
-        const URLIdPokemon = `https://pokeapi.co/api/v2/pokemon/${i}`;
+    for (let idPokemon = min; idPokemon <= max; idPokemon++) {
+        const URLIdPokemon = `https://pokeapi.co/api/v2/pokemon/${idPokemon}`;
         Pokemon = await getAttributesPokemon(URLIdPokemon);
         console.log(Pokemon.name, Pokemon.height, Pokemon.weight);
     }
@@ -26,7 +26,7 @@ const rangeGetPokemon = async (min = 1, max = 1008) => {
 
 // rangeGetPokemon(1, 10); // test case
 
-getWeaknessesType = async (type) => {
+const getWeaknessesType = async (type) => {
     const response = await axios.get(`https://pokeapi.co/api/v2/type/${type}`);
     const data = await response.data;
     const typeWeakness = await data.damage_relations.double_damage_from;
@@ -42,7 +42,7 @@ getWeaknessesType = async (type) => {
 
 const typesPokemon = ['bug', 'dark', 'dragon', 'electric', 'fairy', 'fighting', 'fire', 'flying', 'ghost', 'grass', 'ground', 'ice', 'normal', 'poison', 'psychic', 'rock', 'steel', 'water'];
 
-rangeGetTypeWeakness = async (types) => {     
+const rangeGetTypeWeakness = async (types) => {     
     for (const type of types) {
         const Weaknesses = await getWeaknessesType(type); 
         console.log(type, Weaknesses);
@@ -51,7 +51,7 @@ rangeGetTypeWeakness = async (types) => {
 
 // rangeGetTypeWeakness(typesPokemon); // test case
 
-getTypeStrong = async (type) => {
+const getTypeStrong = async (type) => {
     const response = await axios.get(`https://pokeapi.co/api/v2/type/${type}`);
     const data = await response.data;
     const typeStrong = await data.damage_relations.double_damage_to;
@@ -65,11 +65,11 @@ getTypeStrong = async (type) => {
     return Strong;
 };
 
-rangeGetTypeStrong = async (types) => { 
+const rangeGetTypeStrong = async (types) => { 
     for (const type of types) {
         const Strong = await getTypeStrong(type); 
         console.log(type, Strong);
     }
-}
+};
 
 // rangeGetTypeStrong(typesPokemon); // test case
