@@ -132,7 +132,7 @@ const rangeGetPokemon = async (min = 1, max = 1008) => {
     }
 };
 
-rangeGetPokemon(1, 10); // test case
+rangeGetPokemon(1, 100); // test case
 
 const getWeaknessesType = async (type) => {
     const response = await axios.get(`https://pokeapi.co/api/v2/type/${type}`);
