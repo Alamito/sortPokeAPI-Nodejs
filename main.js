@@ -47,39 +47,51 @@ const deleteOldFiles = (types) => {
     checkExistFile('Pokemons') && deleteFile('Pokemons');
     types.forEach((type) => {
         checkExistFile(type, 'types') && deleteFile(type, 'types');
+
+        checkExistFile(type, 'weaknesses') && deleteFile(type, 'weaknesses');
+        
+        checkExistFile(type, 'strengths') && deleteFile(type, 'strengths');
     });
 };
 
 deleteOldFiles(typesPokemon);
 
-const writeFileAttributesPokemon = (Pokemon) => {
-    try {
-        fs.appendFileSync(
+const writeAttributesPokemonInFile = (Pokemon) => { 
+    fs.appendFileSync(
             './Pokemons.bin',
             `${Pokemon.id};${Pokemon.name};${Pokemon.xp};${Pokemon.height};${Pokemon.weight}\n`,
             'utf8',
         );
+};
+
+const writeFileAttributesPokemon = (Pokemon) => {
+    try {
+        writeAttributesPokemonInFile(Pokemon);
         console.log(`Pokemon ${Pokemon.id} salvo com sucesso!`);
     } catch (err) {
         console.error(err);
     }
 };
 
-const writeIdPokemonPerType = (type1, type2, idPokemon) => {
-    try {
+const writeIdInFile = (type1, type2, idPokemon) => {
+    fs.appendFileSync(
+        `./types/${type1}.bin`,
+        `${idPokemon}\n`,
+        'utf8',
+    );
+
+    if (existType(type2)) {
         fs.appendFileSync(
-            `./types/${type1}.bin`,
+            `./types/${type2}.bin`,
             `${idPokemon}\n`,
             'utf8',
         );
+    }
+}
 
-        if (existType(type2)) {
-            fs.appendFileSync(
-                `./types/${type2}.bin`,
-                `${idPokemon}\n`,
-                'utf8',
-            );
-        }
+const writeIdPokemonPerType = (type1, type2, idPokemon) => {
+    try {
+        writeIdInFile(type1, type2, idPokemon);
         // console.log(`Pokemon ${idPokemon} salvo no tipo ${type1} com sucesso!`);
     } catch (err) {
         console.error(err);
@@ -132,7 +144,7 @@ const rangeGetPokemon = async (min = 1, max = 1008) => {
     }
 };
 
-rangeGetPokemon(1, 100); // test case
+// rangeGetPokemon(1, 10); // test case
 
 const getWeaknessesType = async (type) => {
     const response = await axios.get(`https://pokeapi.co/api/v2/type/${type}`);
@@ -151,34 +163,69 @@ const getWeaknessesType = async (type) => {
 const rangeGetTypeWeakness = async (types) => {
     for (const type of types) {
         const Weaknesses = await getWeaknessesType(type);
-        console.log(type, Weaknesses);
+
+        writeFileWeaknessesType(type, Weaknesses);
     }
 };
 
-// rangeGetTypeWeakness(typesPokemon); // test case
+const writeWeaknessInFile = (type, Weaknesses) => {
+    Weaknesses.forEach((Weakness) => {
+        fs.appendFileSync(
+            `./weaknesses/${type}.bin`,
+            `${Weakness}\n`,
+            'utf8',
+        );
+    });
+}
+
+const writeFileWeaknessesType = (type, Weaknesses) => { 
+    try {
+        writeWeaknessInFile(type, Weaknesses);
+        console.log(`Tipo ${type} salvo com sucesso!`);
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+rangeGetTypeWeakness(typesPokemon); // test case
+
+const writeStrengthInFile = (type, Strengths) => {
+    Strengths.forEach((Strength) => {
+        fs.appendFileSync(`./strengths/${type}.bin`, `${Strength}\n`, 'utf8');
+    });
+};
+
+const writeFileStrengthsType = (type, Strengths) => { 
+    try {
+        writeStrengthInFile(type, Strengths);
+        console.log(`Tipo ${type} salvo com sucesso!`)
+    } catch (err) {
+        console.error(err);
+    }
+}
 
 const getTypeStrong = async (type) => {
     const response = await axios.get(`https://pokeapi.co/api/v2/type/${type}`);
     const data = await response.data;
-    const typeStrong = await data.damage_relations.double_damage_to;
+    const typeStrength = await data.damage_relations.double_damage_to;
 
-    let Strong = [];
+    let Strengths = [];
 
-    typeStrong.forEach((type) => {
-        Strong.push(type.name);
+    typeStrength.forEach((type) => {
+        Strengths.push(type.name);
     });
 
-    return Strong;
+    return Strengths;
 };
 
-const rangeGetTypeStrong = async (types) => {
+const rangeGetTypeStrength = async (types) => {
     for (const type of types) {
-        const Strong = await getTypeStrong(type);
-        console.log(type, Strong);
+        const Strengths = await getTypeStrong(type);
+        writeFileStrengthsType(type, Strengths);
     }
 };
 
-// rangeGetTypeStrong(typesPokemon); // test case
+// rangeGetTypeStrength(typesPokemon); // test case
 
 
 
