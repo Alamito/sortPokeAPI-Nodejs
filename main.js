@@ -59,7 +59,7 @@ const writeFileAttributesPokemon = (Pokemon) => {
             `${Pokemon.id};${Pokemon.name};${Pokemon.xp};${Pokemon.height};${Pokemon.weight}\n`,
             'utf8',
         );
-        // console.log(`Pokemon ${Pokemon.id} salvo com sucesso!`);
+        console.log(`Pokemon ${Pokemon.id} salvo com sucesso!`);
     } catch (err) {
         console.error(err);
     }
@@ -72,8 +72,8 @@ const writeIdPokemonPerType = (type1, type2, idPokemon) => {
             `${idPokemon}\n`,
             'utf8',
         );
-        
-        if (existType2(type2)) {
+
+        if (existType(type2)) {
             fs.appendFileSync(
                 `./types/${type2}.bin`,
                 `${idPokemon}\n`,
@@ -86,7 +86,7 @@ const writeIdPokemonPerType = (type1, type2, idPokemon) => {
     }
 };
 
-const existType2 = (type) => { 
+const existType = (type) => { 
     if (type != null) {
         return true;
     } else {
@@ -118,8 +118,6 @@ const getAttributesPokemon = async (URL) => {
 
     return attributesPokemon;
 };
-
-
 
 const rangeGetPokemon = async (min = 1, max = 1008) => {
     if (checkExistFile('Pokemons'))
