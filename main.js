@@ -37,7 +37,7 @@ const deleteFile = (fileName, directory = '') => {
 
     try {
         fs.unlinkSync(path);
-        console.log(`Arquivo ${fileName} deletado com sucesso!`);
+        console.log(`Arquivo ${fileName}.bin deletado com sucesso!`);
     } catch (err) {
         console.error(err);
     }
@@ -59,22 +59,46 @@ const writeFileAttributesPokemon = (Pokemon) => {
             `${Pokemon.id};${Pokemon.name};${Pokemon.xp};${Pokemon.height};${Pokemon.weight}\n`,
             'utf8',
         );
-        console.log(`Pokemon ${Pokemon.id} salvo com sucesso!`);
+        // console.log(`Pokemon ${Pokemon.id} salvo com sucesso!`);
     } catch (err) {
         console.error(err);
     }
 };
 
-const writeIdPokemonPerType = (typePokemon, idPokemon) => { 
+const writeIdPokemonPerType = (type1, type2, idPokemon) => {
     try {
         fs.appendFileSync(
-            `./types/${typePokemon}.bin`,
+            `./types/${type1}.bin`,
             `${idPokemon}\n`,
             'utf8',
         );
-        console.log(`Pokemon ${idPokemon} salvo no tipo ${typePokemon} com sucesso!`);
+        
+        if (existType2(type2)) {
+            fs.appendFileSync(
+                `./types/${type2}.bin`,
+                `${idPokemon}\n`,
+                'utf8',
+            );
+        }
+        // console.log(`Pokemon ${idPokemon} salvo no tipo ${type1} com sucesso!`);
     } catch (err) {
         console.error(err);
+    }
+};
+
+const existType2 = (type) => { 
+    if (type != null) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+const existInJSONType2 = (data) => { 
+    try {
+        return data.types[1].type.name;
+    } catch (err) {
+        return null;
     }
 }
 
@@ -85,7 +109,8 @@ const getAttributesPokemon = async (URL) => {
     const attributesPokemon = {
         id: data.id,
         name: data.name,
-        type: data.types[0].type.name,
+        type1: data.types[0].type.name,
+        type2: existInJSONType2(data),
         xp: data.base_experience,
         height: data.height / 10,
         weight: data.weight / 10,
@@ -105,7 +130,7 @@ const rangeGetPokemon = async (min = 1, max = 1008) => {
         Pokemon = await getAttributesPokemon(URLIdPokemon);
 
         writeFileAttributesPokemon(Pokemon);
-        writeIdPokemonPerType(Pokemon.type, Pokemon.id);
+        writeIdPokemonPerType(Pokemon.type1, Pokemon.type2, Pokemon.id);
     }
 };
 
