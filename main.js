@@ -37,7 +37,7 @@ const deleteFile = (fileName, directory = '') => {
 
     try {
         fs.unlinkSync(path);
-        console.log(`Arquivo ${fileName}.bin deletado com sucesso!`);
+        console.log(`${fileName}.bin deletado do dir ${directory}!`);
     } catch (err) {
         console.error(err);
     }
@@ -52,22 +52,22 @@ const deleteOldFiles = (types) => {
         
         checkExistFile(type, 'strengths') && deleteFile(type, 'strengths');
     });
-};
 
-deleteOldFiles(typesPokemon);
+    return new Promise(resolve => resolve());
+};
 
 const writeAttributesPokemonInFile = (Pokemon) => { 
     fs.appendFileSync(
             './Pokemons.bin',
             `${Pokemon.id};${Pokemon.name};${Pokemon.xp};${Pokemon.height};${Pokemon.weight}\n`,
             'utf8',
-        );
+    );
+    console.log(`Pokemon ${Pokemon.id} salvo em Pokemons.bin!`)
 };
 
 const writeFileAttributesPokemon = (Pokemon) => {
     try {
         writeAttributesPokemonInFile(Pokemon);
-        console.log(`Pokemon ${Pokemon.id} salvo com sucesso!`);
     } catch (err) {
         console.error(err);
     }
@@ -79,6 +79,7 @@ const writeIdInFile = (type1, type2, idPokemon) => {
         `${idPokemon}\n`,
         'utf8',
     );
+    console.log(`Pokemon ${idPokemon} salvo no tipo ${type1}`);
 
     if (existType(type2)) {
         fs.appendFileSync(
@@ -86,13 +87,14 @@ const writeIdInFile = (type1, type2, idPokemon) => {
             `${idPokemon}\n`,
             'utf8',
         );
+        console.log(`Pokemon ${idPokemon} salvo no tipo ${type2}`);
     }
 }
 
 const writeIdPokemonPerType = (type1, type2, idPokemon) => {
     try {
         writeIdInFile(type1, type2, idPokemon);
-        // console.log(`Pokemon ${idPokemon} salvo no tipo ${type1} com sucesso!`);
+        console.log(`Pokemon ${idPokemon} salvo no tipo ${type1} com sucesso!`);
     } catch (err) {
         console.error(err);
     }
@@ -142,9 +144,9 @@ const rangeGetPokemon = async (min = 1, max = 1008) => {
         writeFileAttributesPokemon(Pokemon);
         writeIdPokemonPerType(Pokemon.type1, Pokemon.type2, Pokemon.id);
     }
-};
 
-// rangeGetPokemon(1, 10); // test case
+    return new Promise((resolve) => resolve());
+};
 
 const getWeaknessesType = async (type) => {
     const response = await axios.get(`https://pokeapi.co/api/v2/type/${type}`);
@@ -166,6 +168,7 @@ const rangeGetTypeWeakness = async (types) => {
 
         writeFileWeaknessesType(type, Weaknesses);
     }
+    return new Promise((resolve) => resolve());
 };
 
 const writeWeaknessInFile = (type, Weaknesses) => {
@@ -175,6 +178,7 @@ const writeWeaknessInFile = (type, Weaknesses) => {
             `${Weakness}\n`,
             'utf8',
         );
+        console.log(`Tipo ${Weakness} salvo com sucesso no dir weaknesses!`);
     });
 }
 
@@ -187,18 +191,16 @@ const writeFileWeaknessesType = (type, Weaknesses) => {
     }
 }
 
-rangeGetTypeWeakness(typesPokemon); // test case
-
 const writeStrengthInFile = (type, Strengths) => {
     Strengths.forEach((Strength) => {
         fs.appendFileSync(`./strengths/${type}.bin`, `${Strength}\n`, 'utf8');
+        console.log(`Tipo ${Strength} salvo com sucesso no dir strengths!`);
     });
 };
 
 const writeFileStrengthsType = (type, Strengths) => { 
     try {
         writeStrengthInFile(type, Strengths);
-        console.log(`Tipo ${type} salvo com sucesso!`)
     } catch (err) {
         console.error(err);
     }
@@ -223,9 +225,18 @@ const rangeGetTypeStrength = async (types) => {
         const Strengths = await getTypeStrong(type);
         writeFileStrengthsType(type, Strengths);
     }
+
+    return new Promise((resolve) => resolve());
 };
 
-// rangeGetTypeStrength(typesPokemon); // test case
+const runTasksSynchronously = async (typesPokemon) => { 
+    await deleteOldFiles(typesPokemon);
+    await rangeGetPokemon(1, 50);
+    await rangeGetTypeWeakness(typesPokemon);
+    await rangeGetTypeStrength(typesPokemon);
+}
+
+runTasksSynchronously(typesPokemon);
 
 
 
