@@ -94,7 +94,6 @@ const writeIdInFile = (type1, type2, idPokemon) => {
 const writeIdPokemonPerType = (type1, type2, idPokemon) => {
     try {
         writeIdInFile(type1, type2, idPokemon);
-        console.log(`Pokemon ${idPokemon} salvo no tipo ${type1} com sucesso!`);
     } catch (err) {
         console.error(err);
     }
@@ -178,14 +177,14 @@ const writeWeaknessInFile = (type, Weaknesses) => {
             `${Weakness}\n`,
             'utf8',
         );
-        console.log(`Tipo ${Weakness} salvo com sucesso no dir weaknesses!`);
+        console.log(`Tipo ${Weakness} salvo no dir weaknesses!`);
     });
 }
 
 const writeFileWeaknessesType = (type, Weaknesses) => { 
     try {
         writeWeaknessInFile(type, Weaknesses);
-        console.log(`Tipo ${type} salvo com sucesso!`);
+        console.log(`Tipo ${type} salvo no dir types!`);
     } catch (err) {
         console.error(err);
     }
@@ -193,8 +192,12 @@ const writeFileWeaknessesType = (type, Weaknesses) => {
 
 const writeStrengthInFile = (type, Strengths) => {
     Strengths.forEach((Strength) => {
-        fs.appendFileSync(`./strengths/${type}.bin`, `${Strength}\n`, 'utf8');
-        console.log(`Tipo ${Strength} salvo com sucesso no dir strengths!`);
+        fs.appendFileSync(
+            `./strengths/${type}.bin`,
+            `${Strength}\n`,
+            'utf8'
+        );
+        console.log(`Tipo ${Strength} salvo no dir strengths!`);
     });
 };
 
@@ -231,13 +234,23 @@ const rangeGetTypeStrength = async (types) => {
 
 const runTasksSynchronously = async (typesPokemon) => { 
     await deleteOldFiles(typesPokemon);
-    await rangeGetPokemon(1, 50);
+    await rangeGetPokemon(1, 1008);
     await rangeGetTypeWeakness(typesPokemon);
     await rangeGetTypeStrength(typesPokemon);
 }
 
-runTasksSynchronously(typesPokemon);
+const runTasksAsynchronously = async (typesPokemon) => {
+    await deleteOldFiles(typesPokemon);
+    rangeGetPokemon(1, 1008);
+    rangeGetTypeWeakness(typesPokemon);
+    rangeGetTypeStrength(typesPokemon);
+};
 
+// runTasksSynchronously(typesPokemon);    // tempo de execucao 1'25'' (medido apenas uma vez)
+
+// runTasksAsynchronously(typesPokemon);   // tempo de execucao 3'20'' (medido apenas uma vez)
+
+// deleteOldFiles(typesPokemon);
 
 
 
