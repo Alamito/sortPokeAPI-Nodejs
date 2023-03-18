@@ -1,5 +1,7 @@
+/* Requisições de módulos */
 const axios = require('axios');
 const fs = require('fs');
+const path = require('path');
 
 const typesPokemon = [
     'bug',
@@ -21,6 +23,29 @@ const typesPokemon = [
     'steel',
     'water',
 ];
+
+const checkExistFolder = (directory) => {   
+    if (fs.existsSync(directory)) {
+        return true;
+    } else {
+        return false;
+    }
+};
+
+const foldersName = ["types", "weaknesses", "strengths"];
+
+const createFolders = () => {               
+    try {
+        foldersName.forEach(folderName => {
+            const directory = `./${folderName}`;
+            if (!checkExistFolder(directory)) {
+                fs.mkdirSync(directory);
+            }
+        });
+    } catch (err) {
+        console.log(err);
+    }
+}
 
 const checkExistFile = (path, directory = '') => {
     path = `./${directory}/${path}.bin`;
@@ -231,6 +256,7 @@ const writeStrengthInFile = (type, Strengths) => {
 
 const runTasksSynchronously = async (typesPokemon) => { 
     await deleteOldFiles(typesPokemon);
+    createFolders();
     await rangeGetPokemon(1, 50);
     await rangeGetTypeWeakness(typesPokemon);
     await rangeGetTypeStrength(typesPokemon);
@@ -238,6 +264,7 @@ const runTasksSynchronously = async (typesPokemon) => {
 
 const runTasksAsynchronously = async (typesPokemon) => {
     await deleteOldFiles(typesPokemon);
+    createFolders();
     rangeGetPokemon(1, 1008);
     rangeGetTypeWeakness(typesPokemon);
     rangeGetTypeStrength(typesPokemon);
@@ -246,7 +273,3 @@ const runTasksAsynchronously = async (typesPokemon) => {
 // runTasksSynchronously(typesPokemon);    // tempo de execucao 1'25'' (medido apenas uma vez)
 
 // runTasksAsynchronously(typesPokemon);   // tempo de execucao 3'20'' (medido apenas uma vez)
-
-
-
-
