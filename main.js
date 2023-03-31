@@ -45,6 +45,8 @@ const createFolders = () => {
     } catch (err) {
         console.log(err);
     }
+    
+    return new Promise((resolve) => resolve());
 }
 
 const checkExistFile = (path, directory = '') => {
@@ -256,7 +258,7 @@ const writeStrengthInFile = (type, Strengths) => {
 
 const runTasksSynchronously = async (typesPokemon) => { 
     await deleteOldFiles(typesPokemon);
-    createFolders();
+    await createFolders();
     await rangeGetPokemon(1, 50);
     await rangeGetTypeWeakness(typesPokemon);
     await rangeGetTypeStrength(typesPokemon);
@@ -264,7 +266,7 @@ const runTasksSynchronously = async (typesPokemon) => {
 
 const runTasksAsynchronously = async (typesPokemon) => {
     await deleteOldFiles(typesPokemon);
-    createFolders();
+    await createFolders();
     rangeGetPokemon(1, 1008);
     rangeGetTypeWeakness(typesPokemon);
     rangeGetTypeStrength(typesPokemon);
