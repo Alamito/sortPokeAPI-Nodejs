@@ -28,7 +28,7 @@ const getWeaknessesType = async (type) => {
 const writeFileWeaknessesType = (type, Weaknesses) => {
     try {
         writeWeaknessInFile(type, Weaknesses);
-        console.log(`Tipo ${type} salvo no dir types!`);
+        // console.log(`Tipo ${type} salvo no dir types!`);
     } catch (err) {
         console.error(err);
     }
@@ -37,7 +37,7 @@ const writeFileWeaknessesType = (type, Weaknesses) => {
 const writeWeaknessInFile = (type, Weaknesses) => {
     Weaknesses.forEach((Weakness) => {
         fs.appendFileSync(`./weaknesses/${type}.bin`, `${Weakness}\n`, 'utf8');
-        console.log(`Tipo ${Weakness} salvo no dir weaknesses!`);
+        // console.log(`Tipo ${Weakness} salvo no dir weaknesses!`);
     });
 };
 
@@ -75,7 +75,7 @@ const writeFileStrengthsType = (type, Strengths) => {
 const writeStrengthInFile = (type, Strengths) => {
     Strengths.forEach((Strength) => {
         fs.appendFileSync(`./strengths/${type}.bin`, `${Strength}\n`, 'utf8');
-        console.log(`Tipo ${Strength} salvo no dir strengths!`);
+        // console.log(`Tipo ${Strength} salvo no dir strengths!`);
     });
 };
 

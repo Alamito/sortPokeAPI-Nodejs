@@ -54,7 +54,7 @@ const writeFileAttributesPokemon = (Pokemon) => {
 };
 
 const writeAttributesPokemonInFile = (Pokemon) => {
-    fs.appendFileSync('./Pokemons.bin', `${Pokemon.id};${Pokemon.name};${Pokemon.xp};${Pokemon.height};${Pokemon.weight}\n`, 'utf8');
+    fs.appendFileSync('./Pokemons.bin', `${Pokemon.id};${Pokemon.name};${Pokemon.type1};${Pokemon.type2};${Pokemon.xp};${Pokemon.height};${Pokemon.weight}\n`, 'utf8');
     console.log(`Pokemon ${Pokemon.id} salvo em Pokemons.bin!`);
 };
 
@@ -72,7 +72,7 @@ const writeIdInFile = (type1, type2, idPokemon) => {
 
     if (existType(type2)) {
         fs.appendFileSync(`./types/${type2}.bin`, `${idPokemon}\n`, 'utf8');
-        console.log(`Pokemon ${idPokemon} salvo no tipo ${type2}`);
+        // console.log(`Pokemon ${idPokemon} salvo no tipo ${type2}`);
     }
 };
 
