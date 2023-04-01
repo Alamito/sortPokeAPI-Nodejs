@@ -19,7 +19,6 @@ const readAttributesPokemon = (dir, type) => {
         const buffer = fs.readFileSync(`./${dir}/${type}.bin`);
         const data = buffer.toString('utf-8');
         searchIdPokemonByType(data, type);
-        // console.log(data);
     } catch (err) {
         console.error(err);
     }
