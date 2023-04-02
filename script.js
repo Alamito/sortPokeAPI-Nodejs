@@ -31,46 +31,70 @@ const searchPokemonsByPrefix = (prefix) => {
     });
 };
 
-const readAttributesPokemon = (dir, type) => {
-    try {
-        const buffer = fs.readFileSync(`./${dir}/${type}.bin`);
-        const data = buffer.toString('utf-8');
-        searchIdPokemonByType(data, type);
-    } catch (err) {
-        console.error(err);
-    }
+const readAttributesPokemon = async (dir, type) => {
+    const promiseCallback = async (resolve) => {
+        try {
+            const buffer = fs.readFileSync(`./${dir}/${type}.bin`);
+            const data = buffer.toString('utf-8');
+            await searchIdPokemonByType(data, type);
+            resolve(true);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    return new Promise(promiseCallback);
 };
 
 const searchIdPokemonByType = async (types, searchType) => {
-    types = types.split('\n');
-    types.pop();
+    const promiseCallback = async (resolve) => { 
+        types = types.split('\n');
+        types.pop();
 
-    let IDsPokemon = [];
+        let IDsPokemon = [];
 
-    for (let type of types) {
-        const buffer = fs.readFileSync(`./types/${type}.bin`);
-        let data = buffer.toString('utf-8');
-        data = data.trim().split('\n');
-        data.forEach((index) => {
-            IDsPokemon.push(index);
-        });
-    }
-
-    getPokemonNameById(IDsPokemon, searchType);
+        for (let type of types) {
+            const buffer = fs.readFileSync(`./types/${type}.bin`);
+            let data = buffer.toString('utf-8');
+            data = data.trim().split('\n');
+            data.forEach((index) => {
+                IDsPokemon.push(index);
+            });
+        }
+        await getPokemonNameById(IDsPokemon, searchType);
+        resolve(true);
+    };
+    
+   return new Promise(promiseCallback);
 };
 
 const getPokemonNameById = (IDs, type) => {
-    IDs.forEach((id) => {
-        lineReader.eachLine('./Pokemons.bin', function (line, last) {
-            const idFile = line.split(';')[0];
-            const type1 = line.split(';')[2];
-            const type2 = line.split(';')[3];
-            if (idFile === id && type1 !== type && type2 !== type) {
-                const pokemonName = line.split(';')[1];
-                console.log(pokemonName);
-            }
-        });
-    });
+    const promiseCallback = async (resolve) => { 
+        await readFilePokemon(IDs, type);
+        resolve(true);
+    };
+
+    return new Promise(promiseCallback);
+};
+
+const readFilePokemon = (IDs, type) => {
+    const promiseCallback = async (resolve) => {
+        for (let i = 0; i < IDs.length; i++) {
+            lineReader.eachLine('./Pokemons.bin', function (line, last) {
+                const idFile = line.split(';')[0];
+                const type1 = line.split(';')[2];
+                const type2 = line.split(';')[3];
+                if (idFile === IDs[i] && type1 !== type && type2 !== type) {
+                    const pokemonName = line.split(';')[1];
+                    console.log(pokemonName);
+                }
+                if (last) {
+                    resolve(true);
+                }
+            });
+        }
+    };
+    return new Promise(promiseCallback);
 };
 
 const readLastIdFile = () => {
@@ -106,8 +130,8 @@ const runTasksSynchronously = async (typesPokemon) => {
         await weakStrength.rangeGetTypeStrength(typesPokemon);
     }
     // readAttributesPokemon('weaknesses', 'water');
-    await InsertNamePokemonInTrie();
-    menu.showMenu();
+    // await InsertNamePokemonInTrie();
+    // searchPokemonsByPrefix('pik');
 };
 
 const runTasksAsynchronously = async (typesPokemon) => {
@@ -123,4 +147,6 @@ module.exports = {
     runTasksAsynchronously,
     searchPokemonsByPrefix,
     insertNewPokemon,
+    readAttributesPokemon,
+    InsertNamePokemonInTrie,
 };
