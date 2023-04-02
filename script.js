@@ -56,15 +56,14 @@ const getPokemonNameById = (IDs, type) => {
 };
 
 const runTasksSynchronously = async (typesPokemon) => {
-    // const initialFiles = await checkFiles.existFiles(typesPokemon);
     if (!(await checkFiles.existFiles(typesPokemon))) {
         await checkFiles.deleteOldFiles(typesPokemon);
         await checkFiles.createFolders();
+        await pokemons.rangeGetPokemon(1, 1008);
+        await weakStrength.rangeGetTypeWeakness(typesPokemon);
+        await weakStrength.rangeGetTypeStrength(typesPokemon);
     }
-    await pokemons.rangeGetPokemon(1, 50);
-    await weakStrength.rangeGetTypeWeakness(typesPokemon);
-    await weakStrength.rangeGetTypeStrength(typesPokemon);
-    readAttributesPokemon('strengths', 'poison');
+    readAttributesPokemon('weaknesses', 'water');
 };
 
 const runTasksAsynchronously = async (typesPokemon) => {

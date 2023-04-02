@@ -29,7 +29,7 @@ const existFiles = (typesPokemon) => {
         typesPokemon.forEach((type) => {
             if (!fs.existsSync(`./types/${type}.bin`)) return resolve(false);
             if (!fs.existsSync(`./weaknesses/${type}.bin`)) return resolve(false);
-            if (!fs.existsSync(`./strengths/${type}.bin`)) return resolve(false);
+            if (!fs.existsSync(`./strengths/${type}.bin`) && type != 'normal') return resolve(false);
         });
         resolve(true);
     };
