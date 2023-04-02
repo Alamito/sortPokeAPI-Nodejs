@@ -96,4 +96,12 @@ class Trie {
 
 var trie = new Trie();
 
+const InsertNamePokemonInTrie = (name) => {
+    lineReader.eachLine('./Pokemons.bin', function (line, last) {
+        const namePokemon = line.split(';')[1];
+        trie.insert(namePokemon);
+    });
+    return new Promise((resolve) => resolve());
+};
+
 module.exports = trie;

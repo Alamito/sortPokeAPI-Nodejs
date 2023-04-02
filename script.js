@@ -6,6 +6,19 @@ const pokemons = require('./pokemons.js');
 const checkFiles = require('./checkFiles.js');
 const weakStrength = require('./weakStrength.js');
 
+const InsertNamePokemonInTrie = () => {
+    const promiseCallback = (resolve) => {
+        lineReader.eachLine('./Pokemons.bin', function (line) {
+            const namePokemon = line.split(';')[1];
+            Trie.insert(namePokemon);
+            // console.log(namePokemon);
+        }, () => { 
+            resolve(true);
+        });
+    };
+    return new Promise(promiseCallback);
+};
+
 const searchPokemonsByPrefix = (prefix) => {
     const matches = Trie.searchPrefix(prefix.toLowerCase());
     matches.forEach((match) => {
@@ -63,7 +76,10 @@ const runTasksSynchronously = async (typesPokemon) => {
         await weakStrength.rangeGetTypeWeakness(typesPokemon);
         await weakStrength.rangeGetTypeStrength(typesPokemon);
     }
-    readAttributesPokemon('weaknesses', 'water');
+    // readAttributesPokemon('weaknesses', 'water');
+    await InsertNamePokemonInTrie();
+    console.log('---------------------');
+    searchPokemonsByPrefix('ch');
 };
 
 const runTasksAsynchronously = async (typesPokemon) => {

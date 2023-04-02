@@ -8,16 +8,11 @@ const rangeGetPokemon = async (min = 1, max = 1008) => {
         const URLIdPokemon = `https://pokeapi.co/api/v2/pokemon/${idPokemon}`;
         Pokemon = await getAttributesPokemon(URLIdPokemon);
 
-        InsertNamePokemonInTrie(Pokemon.name);
         writeFileAttributesPokemon(Pokemon);
         writeIdPokemonPerType(Pokemon.type1, Pokemon.type2, Pokemon.id);
     }
 
     return new Promise((resolve) => resolve());
-};
-
-const InsertNamePokemonInTrie = (name) => {
-    Trie.insert(name);
 };
 
 const getAttributesPokemon = async (URL) => {
@@ -86,7 +81,6 @@ const existType = (type) => {
 
 module.exports = {
     rangeGetPokemon,
-    InsertNamePokemonInTrie,
     getAttributesPokemon,
     existInJSONType2,
     writeFileAttributesPokemon,
