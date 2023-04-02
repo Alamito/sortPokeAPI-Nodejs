@@ -62,17 +62,21 @@ const getPokemonNameById = (IDs, type) => {
             const type1 = line.split(';')[2];
             const type2 = line.split(';')[3];
             if (idFile === id && type1 !== type && type2 !== type) {
-                console.log(line.split(';')[1]);
+                const pokemonName = line.split(';')[1];
+                console.log(pokemonName);
             }
         });
     });
 };
 
+const MIN = 1; // id do primeiro pokemon
+const MAX = 1008; // id do ultimo pokemon
+
 const runTasksSynchronously = async (typesPokemon) => {
     if (!(await checkFiles.existFiles(typesPokemon))) {
         await checkFiles.deleteOldFiles(typesPokemon);
         await checkFiles.createFolders();
-        await pokemons.rangeGetPokemon(1, 1008);
+        await pokemons.rangeGetPokemon(MIN, MAX);
         await weakStrength.rangeGetTypeWeakness(typesPokemon);
         await weakStrength.rangeGetTypeStrength(typesPokemon);
     }
