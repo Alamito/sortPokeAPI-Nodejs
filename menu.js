@@ -1,39 +1,49 @@
-const script = require('./script.js');
+// var rl = require('readline-sync');
 const readline = require('readline');
 
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
-    terminal: false,
 });
 
-const typesPokemon = [
-    'bug',
-    'dark',
-    'dragon',
-    'electric',
-    'fairy',
-    'fighting',
-    'fire',
-    'flying',
-    'ghost',
-    'grass',
-    'ground',
-    'ice',
-    'normal',
-    'poison',
-    'psychic',
-    'rock',
-    'steel',
-    'water',
-];
+const findPokemonByNameOrPrefix = () => {
+    const promiseCallback = (resolve) => {
+        let name = rl.question('Digite o nome do pokemon').toString();
+        resolve(name);
+    };
 
-// script.runTasksSynchronously(typesPokemon); // tempo de execucao 1'25'' (medido apenas uma vez)
+    return new Promise(promiseCallback);
+};
 
-// script.insertNewPokemon('Gui Terres', 'fire', 'water', 10, 1.7, 67);
 
-// runTasksAsynchronously(typesPokemon);   // tempo de execucao 3'20'' (medido apenas uma vez)
+const findWeakAgainstPokemon = () => {
+    const promiseCallback = (resolve) => {
+        let type = rl.question('Digite o tipo de pokémon: ');
+        resolve(type);
+    };
 
+    return new Promise(promiseCallback);
+};
+
+const findStrongAgainstPokemon = () => {
+    const promiseCallback = (resolve) => {
+        let type = rl.question('Digite o tipo de pokémon: ');
+        resolve(type);
+    };
+
+    return new Promise(promiseCallback);
+};
+
+const addNewPokemon = () => {
+    const promiseCallback = (resolve) => {
+        let type = rl.question('Digite o tipo de pokémon: ');
+        resolve(type);
+    };
+
+    return new Promise(promiseCallback);
+};
+
+/*
 const showMenu = async () => {
     console.log('\nEscolha uma opção:');
     console.log('1 - Consultar trechos x modalidade');
@@ -48,9 +58,11 @@ const showMenu = async () => {
                 showMenu();
                 break;
             case '2':
+        
                 showMenu();
                 break;
             case '3':
+        
                 showMenu();
                 break;
             case '4':
@@ -64,5 +76,8 @@ const showMenu = async () => {
         }
     });
 };
+*/
 
-showMenu();
+// showMenu();
+
+//module.exports = showMenu();

@@ -1,7 +1,6 @@
 /* Módulos */
 const axios = require('axios');
 const fs = require('fs');
-const Trie = require('./Trie.js');
 
 const rangeGetPokemon = async (min = 1, max = 1008) => {
     for (let idPokemon = min; idPokemon <= max; idPokemon++) {

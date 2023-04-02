@@ -1,20 +1,24 @@
 const fs = require('fs');
 const lineReader = require('line-reader');
-
 const Trie = require('./Trie.js');
 const pokemons = require('./pokemons.js');
 const checkFiles = require('./checkFiles.js');
 const weakStrength = require('./weakStrength.js');
+const menu = require('./menu.js');
 
 const InsertNamePokemonInTrie = () => {
     const promiseCallback = (resolve) => {
-        lineReader.eachLine('./Pokemons.bin', function (line) {
-            const namePokemon = line.split(';')[1];
-            Trie.insert(namePokemon);
-            // console.log(namePokemon);
-        }, () => { 
-            resolve(true);
-        });
+        lineReader.eachLine(
+            './Pokemons.bin',
+            function (line) {
+                const namePokemon = line.split(';')[1];
+                Trie.insert(namePokemon);
+                // console.log(namePokemon);
+            },
+            () => {
+                resolve(true);
+            },
+        );
     };
     return new Promise(promiseCallback);
 };
@@ -69,8 +73,29 @@ const getPokemonNameById = (IDs, type) => {
     });
 };
 
+const readLastIdFile = () => {
+    let lastID = fs.readFileSync(`./lastID.txt`);
+    lastID = parseInt(lastID);
+
+    return lastID;
+};
+
+const insertNewPokemon = (name, type1, type2, XP, height, weight) => {
+    lastIDPokemon = readLastIdFile() + 1;
+    writeNewLastId(lastIDPokemon);
+    const newPokemon = `${lastIDPokemon};${name};${type1};${type2};${XP};${height};${weight}\n`;
+    fs.appendFileSync('./Pokemons.bin', newPokemon);
+    Trie.insert(name);
+};
+
+const writeNewLastId = (ID) => {
+    ID = ID.toString();
+    fs.writeFileSync('./lastID.txt', ID);
+};
+
 const MIN = 1; // id do primeiro pokemon
 const MAX = 1008; // id do ultimo pokemon
+var lastIDPokemon = MAX;
 
 const runTasksSynchronously = async (typesPokemon) => {
     if (!(await checkFiles.existFiles(typesPokemon))) {
@@ -82,8 +107,7 @@ const runTasksSynchronously = async (typesPokemon) => {
     }
     // readAttributesPokemon('weaknesses', 'water');
     await InsertNamePokemonInTrie();
-    console.log('---------------------');
-    searchPokemonsByPrefix('ch');
+    menu.showMenu();
 };
 
 const runTasksAsynchronously = async (typesPokemon) => {
@@ -98,4 +122,5 @@ module.exports = {
     runTasksSynchronously,
     runTasksAsynchronously,
     searchPokemonsByPrefix,
+    insertNewPokemon,
 };
