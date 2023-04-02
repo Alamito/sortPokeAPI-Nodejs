@@ -2,6 +2,41 @@
 const fs = require('fs');
 const path = require('path');
 
+const typesPokemon = [
+    'bug',
+    'dark',
+    'dragon',
+    'electric',
+    'fairy',
+    'fighting',
+    'fire',
+    'flying',
+    'ghost',
+    'grass',
+    'ground',
+    'ice',
+    'normal',
+    'poison',
+    'psychic',
+    'rock',
+    'steel',
+    'water',
+];
+
+const existFiles = (typesPokemon) => {
+    const promiseCallback = (resolve) => { 
+        if (!fs.existsSync('./Pokemons.bin')) return resolve(false);
+        typesPokemon.forEach((type) => {
+            if (!fs.existsSync(`./types/${type}.bin`)) return resolve(false);
+            if (!fs.existsSync(`./weaknesses/${type}.bin`)) return resolve(false);
+            if (!fs.existsSync(`./strengths/${type}.bin`)) return resolve(false);
+        });
+        resolve(true);
+    };
+    
+    return new Promise(promiseCallback);
+};
+
 const checkExistFolder = (directory) => {
     if (fs.existsSync(directory)) {
         return true;
@@ -62,6 +97,7 @@ const deleteOldFiles = (types) => {
 };
 
 module.exports = {
+    existFiles,
     checkExistFolder,
     createFolders,
     checkExistFile,

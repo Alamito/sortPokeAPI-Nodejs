@@ -56,8 +56,11 @@ const getPokemonNameById = (IDs, type) => {
 };
 
 const runTasksSynchronously = async (typesPokemon) => {
-    await checkFiles.deleteOldFiles(typesPokemon);
-    await checkFiles.createFolders();
+    // const initialFiles = await checkFiles.existFiles(typesPokemon);
+    if (!(await checkFiles.existFiles(typesPokemon))) {
+        await checkFiles.deleteOldFiles(typesPokemon);
+        await checkFiles.createFolders();
+    }
     await pokemons.rangeGetPokemon(1, 50);
     await weakStrength.rangeGetTypeWeakness(typesPokemon);
     await weakStrength.rangeGetTypeStrength(typesPokemon);
