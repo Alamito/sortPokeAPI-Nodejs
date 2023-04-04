@@ -23,11 +23,14 @@ const InsertNamePokemonInTrie = () => {
     return new Promise(promiseCallback);
 };
 
+var structDataPokemon = [];
+
 const searchPokemonsByPrefix = (prefix) => {
+    structDataPokemon = [];
     const matches = Trie.searchPrefix(prefix.toLowerCase());
     matches.forEach((match) => {
-        if (match === prefix) console.log(match);
-        else console.log(`${prefix.toLowerCase()}${match}`);
+        if (match === prefix) structDataPokemon.push({NOME: match});
+        else structDataPokemon.push({NOME:`${prefix.toLowerCase()}${match}`});
     });
 };
 
@@ -77,16 +80,23 @@ const getPokemonNameById = (IDs, type) => {
     return new Promise(promiseCallback);
 };
 
+
+
 const readFilePokemon = (IDs, type) => {
+    structDataPokemon = [];
     const promiseCallback = async (resolve) => {
+        console.log('CARREGANDO...');
         for (let i = 0; i < IDs.length; i++) {
             lineReader.eachLine('./Pokemons.bin', function (line, last) {
                 const idFile = line.split(';')[0];
                 const type1 = line.split(';')[2];
                 const type2 = line.split(';')[3];
+                const XP = line.split(';')[4];
+                const height = line.split(';')[5];
+                const weight = line.split(';')[6];
                 if (idFile === IDs[i] && type1 !== type && type2 !== type) {
                     const pokemonName = line.split(';')[1];
-                    console.log(pokemonName);
+                    structDataPokemon.push({ ID: idFile, NOME: pokemonName, 'TIPO 1': type1, 'TIPO 2': type2, XP, 'ALTURA [m]': height, 'PESO [Kg]': weight });
                 }
                 if (last) {
                     resolve(true);
@@ -96,6 +106,11 @@ const readFilePokemon = (IDs, type) => {
     };
     return new Promise(promiseCallback);
 };
+
+const logInfoPokemon = () => { 
+    console.log('---------------------------------------------------------------------------------------------------------');
+    console.table(structDataPokemon);
+}
 
 const readLastIdFile = () => {
     let lastID = fs.readFileSync(`./lastID.txt`);
@@ -149,4 +164,5 @@ module.exports = {
     insertNewPokemon,
     readAttributesPokemon,
     InsertNamePokemonInTrie,
+    logInfoPokemon,
 };

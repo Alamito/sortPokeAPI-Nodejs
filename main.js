@@ -38,28 +38,34 @@ const typesPokemon = [
 script.InsertNamePokemonInTrie();
 
 const showMenu = async () => {
-    console.log('\nEscolha uma opção:');
-    console.log('1 - Procure pokémon por nome ou prefixo');
-    console.log('2 - Liste pokémons FORTES contra um tipo específico');
-    console.log('3 - Liste pokémons FRACOS contra um tipo específico');
-    console.log('5 - Insira um novo pokémon');
-    console.log('6 - Sair');
+    console.log('\nESCOLHA UMA OPÇÃO:');
+    console.log('1 - PROCURE POKÉMON POR NOME OU VÁRIOS POR PREFIXO');
+    console.log('2 - LISTE POKÉMONS FORTES CONTRA UM TIPO ESPECÍFICO');
+    console.log('3 - LISTE POKÉMONS FRACOS CONTRA UM TIPO ESPECÍFICO');
+    console.log('4 - INSIRA UM NOVO POKÉMON');
+    console.log('5 - SAIR');
 
     rl.question('Opção escolhida: ', async (option) => {
         switch (option) {
             case '1':
                 const word = await menu.findPokemonByNameOrPrefix();
                 script.searchPokemonsByPrefix(word);
+                script.logInfoPokemon();
 
                 showMenu();
                 break;
-            case '2':
-                const type = await menu.findStrongAgainstPokemon();
-                await script.readAttributesPokemon('weaknesses', type);
+            case '2' || '3':
+                const typeStrong = await menu.findStrongAgainstPokemon();
+                await script.readAttributesPokemon('weaknesses', typeStrong);
+                script.logInfoPokemon();
 
                 showMenu();
                 break;
             case '3':
+                const typeWeak = await menu.findWeakAgainstPokemon();
+                await script.readAttributesPokemon('strengths', typeWeak);
+                script.logInfoPokemon();
+                
                 showMenu();
                 break;
             case '4':
@@ -67,10 +73,6 @@ const showMenu = async () => {
                 rl.close();
                 break;
             case '5':
-                console.log('\nPROGRAMA ENCERRADO!\n');
-                rl.close();
-                break;
-            case '6':
                 console.log('\nPROGRAMA ENCERRADO!\n');
                 rl.close();
                 break;
