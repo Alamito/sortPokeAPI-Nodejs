@@ -23,8 +23,9 @@ const typesPokemon = [
 ];
 
 const existFiles = (typesPokemon) => {
-    const promiseCallback = (resolve) => { 
+    const promiseCallback = (resolve) => {
         if (!fs.existsSync('./Pokemons.bin')) return resolve(false);
+        if (!fs.existsSync('./lastID.txt')) return resolve(false);
         typesPokemon.forEach((type) => {
             if (!fs.existsSync(`./types/${type}.bin`)) return resolve(false);
             if (!fs.existsSync(`./weaknesses/${type}.bin`)) return resolve(false);
@@ -32,7 +33,7 @@ const existFiles = (typesPokemon) => {
         });
         resolve(true);
     };
-    
+
     return new Promise(promiseCallback);
 };
 
@@ -58,6 +59,13 @@ const createFolders = () => {
         console.log(err);
     }
 
+    return new Promise((resolve) => resolve());
+};
+
+const createFileID = (lastID) => {
+    fs.writeFileSync('./lastID.txt', lastID.toString(), (err) => {
+        if (err) throw err;
+    });
     return new Promise((resolve) => resolve());
 };
 
@@ -102,4 +110,5 @@ module.exports = {
     checkExistFile,
     deleteFile,
     deleteOldFiles,
+    createFileID,
 };

@@ -28,8 +28,8 @@ const searchPokemonsByPrefix = (prefix) => {
     structDataPokemon = [];
     const matches = Trie.searchPrefix(prefix.toLowerCase());
     matches.forEach((match) => {
-        if (match === prefix) structDataPokemon.push({NOME: match});
-        else structDataPokemon.push({NOME:`${prefix.toLowerCase()}${match}`});
+        if (match === prefix) structDataPokemon.push({ NOME: match });
+        else structDataPokemon.push({ NOME: `${prefix.toLowerCase()}${match}` });
     });
 };
 
@@ -49,7 +49,7 @@ const readAttributesPokemon = async (dir, type) => {
 };
 
 const searchIdPokemonByType = async (types, searchType) => {
-    const promiseCallback = async (resolve) => { 
+    const promiseCallback = async (resolve) => {
         types = types.split('\n');
         types.pop();
 
@@ -66,20 +66,18 @@ const searchIdPokemonByType = async (types, searchType) => {
         await getPokemonNameById(IDsPokemon, searchType);
         resolve(true);
     };
-    
-   return new Promise(promiseCallback);
+
+    return new Promise(promiseCallback);
 };
 
 const getPokemonNameById = (IDs, type) => {
-    const promiseCallback = async (resolve) => { 
+    const promiseCallback = async (resolve) => {
         await readFilePokemon(IDs, type);
         resolve(true);
     };
 
     return new Promise(promiseCallback);
 };
-
-
 
 const readFilePokemon = (IDs, type) => {
     structDataPokemon = [];
@@ -106,10 +104,10 @@ const readFilePokemon = (IDs, type) => {
     return new Promise(promiseCallback);
 };
 
-const logInfoPokemon = () => { 
+const logInfoPokemon = () => {
     console.log('---------------------------------------------------------------------------------------------------------');
     console.table(structDataPokemon);
-}
+};
 
 const readLastIdFile = () => {
     let lastID = fs.readFileSync(`./lastID.txt`);
@@ -137,15 +135,16 @@ var lastIDPokemon = MAX;
 
 const runTasksSynchronously = async (typesPokemon) => {
     if (!(await checkFiles.existFiles(typesPokemon))) {
-        await checkFiles.deleteOldFiles(typesPokemon);
-        await checkFiles.createFolders();
-        await pokemons.rangeGetPokemon(MIN, MAX);
-        await weakStrength.rangeGetTypeWeakness(typesPokemon);
-        await weakStrength.rangeGetTypeStrength(typesPokemon);
+        // await checkFiles.deleteOldFiles(typesPokemon);
+        // await checkFiles.createFolders();
+        // await pokemons.rangeGetPokemon(MIN, MAX);
+        // await weakStrength.rangeGetTypeWeakness(typesPokemon);
+        // await weakStrength.rangeGetTypeStrength(typesPokemon);
+        await checkFiles.createFileID(MAX);
+        console.log('entrou aqui');
     }
-    // readAttributesPokemon('weaknesses', 'water');
-    // await InsertNamePokemonInTrie();
-    // searchPokemonsByPrefix('pik');
+    await InsertNamePokemonInTrie();
+    return new Promise((resolve) => resolve());
 };
 
 const runTasksAsynchronously = async (typesPokemon) => {

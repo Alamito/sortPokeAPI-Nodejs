@@ -30,12 +30,15 @@ const typesPokemon = [
     'water',
 ];
 
-// script.runTasksSynchronously(typesPokemon); // tempo de execucao 1'25'' (medido apenas uma vez)
-
 // script.insertNewPokemon('Gui Terres', 'fire', 'water', 10, 1.7, 67);
 
 // runTasksAsynchronously(typesPokemon);   // tempo de execucao 3'20'' (medido apenas uma vez)
-script.InsertNamePokemonInTrie();
+
+const runTasksMain = async () => {
+    await script.runTasksSynchronously(typesPokemon); // tempo de execucao 1'25'' (medido apenas uma vez)
+    showMenu();
+}
+
 
 const showMenu = async () => {
     console.log('\nESCOLHA UMA OPÇÃO:');
@@ -69,8 +72,10 @@ const showMenu = async () => {
                 showMenu();
                 break;
             case '4':
-                console.log('\nPROGRAMA ENCERRADO!\n');
-                rl.close();
+                dataPokemon = await menu.addOrUpdateNewPokemon();
+                script.insertNewPokemon(dataPokemon.name, dataPokemon.type1, dataPokemon.type2, dataPokemon.XP, dataPokemon.height, dataPokemon.weight);
+                
+                showMenu();
                 break;
             case '5':
                 console.log('\nPROGRAMA ENCERRADO!\n');
@@ -84,4 +89,5 @@ const showMenu = async () => {
     });
 };
 
-showMenu();
+// showMenu();
+runTasksMain();
