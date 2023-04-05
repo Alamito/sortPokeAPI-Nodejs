@@ -13,7 +13,6 @@ const InsertNamePokemonInTrie = () => {
             function (line) {
                 const namePokemon = line.split(';')[1];
                 Trie.insert(namePokemon);
-                // console.log(namePokemon);
             },
             () => {
                 resolve(true);

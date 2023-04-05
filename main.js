@@ -54,7 +54,7 @@ const showMenu = async () => {
 
                 showMenu();
                 break;
-            case '2' || '3':
+            case '2':
                 const typeStrong = await menu.findStrongAgainstPokemon();
                 await script.readAttributesPokemon('weaknesses', typeStrong);
                 script.logInfoPokemon();
