@@ -116,12 +116,47 @@ const readLastIdFile = () => {
     return lastID;
 };
 
-const insertNewPokemon = (name, type1, type2, XP, height, weight) => {
-    lastIDPokemon = readLastIdFile() + 1;
-    writeNewLastId(lastIDPokemon);
-    const newPokemon = `${lastIDPokemon};${name};${type1};${type2};${XP};${height};${weight}\n`;
-    fs.appendFileSync('./Pokemons.bin', newPokemon);
-    Trie.insert(name);
+let pokeID = '0';
+let existePoke = false;
+
+const checkExistPokemon = name => {
+    const promiseCallback = async (resolve) => {
+        lineReader.eachLine(
+            './Pokemons.bin',
+            function (line) {
+                const namePokemon = line.split(';')[1];
+                const idPokemon = line.split(';')[0];
+                if (name === namePokemon){
+                    pokeID = idPokemon;
+                    existPoke = true;
+                }
+            },
+            () => {
+                resolve(true);
+            },
+        );
+    };
+
+    return new Promise(promiseCallback);
+} 
+
+const insertNewPokemon = async (name, type1, type2, XP, height, weight) => {
+    await checkExistPokemon(name);
+
+    if (pokeID === '0' && existPoke === false) {
+        lastIDPokemon = readLastIdFile() + 1;
+        writeNewLastId(lastIDPokemon);
+        const newPokemon = `${lastIDPokemon};${name};${type1};${type2};${XP};${height};${weight}\n`;
+        fs.appendFileSync('./Pokemons.bin', newPokemon);
+        Trie.insert(name);
+    } else {
+        const pokemons = fs.readFileSync('./Pokemons.bin', 'utf-8').split('\n');
+        pokemons.splice(parseInt(pokeID) - 1, 1, `${pokeID};${name};${type1};${type2};${XP};${height};${weight}`);
+        const newFile = pokemons.join('\n');
+        fs.writeFileSync('./Pokemons.bin', newFile, { encoding: 'utf-8' });
+        pokeID = '0';
+        existPoke = false;
+    }
 };
 
 const writeNewLastId = (ID) => {
@@ -130,16 +165,16 @@ const writeNewLastId = (ID) => {
 };
 
 const MIN = 1; // id do primeiro pokemon
-const MAX = 1008; // id do ultimo pokemon
+const MAX = 979; // id do ultimo pokemon
 var lastIDPokemon = MAX;
 
 const runTasksSynchronously = async (typesPokemon) => {
     if (!(await checkFiles.existFiles(typesPokemon))) {
-        // await checkFiles.deleteOldFiles(typesPokemon);
-        // await checkFiles.createFolders();
-        // await pokemons.rangeGetPokemon(MIN, MAX);
-        // await weakStrength.rangeGetTypeWeakness(typesPokemon);
-        // await weakStrength.rangeGetTypeStrength(typesPokemon);
+        await checkFiles.deleteOldFiles(typesPokemon);
+        await checkFiles.createFolders();
+        await pokemons.rangeGetPokemon(MIN, MAX);
+        await weakStrength.rangeGetTypeWeakness(typesPokemon);
+        await weakStrength.rangeGetTypeStrength(typesPokemon);
         await checkFiles.createFileID(MAX);
         console.log('entrou aqui');
     }
