@@ -3,6 +3,7 @@ const readline = require('readline');
 const menu = require('./menu.js');
 const fs = require('fs');
 
+/* NECESSARIO PARA INTERACAO DO USUARIO */
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
@@ -30,15 +31,10 @@ const typesPokemon = [
     'water',
 ];
 
-// script.insertNewPokemon('Gui Terres', 'fire', 'water', 10, 1.7, 67);
-
-// runTasksAsynchronously(typesPokemon);   // tempo de execucao 3'20'' (medido apenas uma vez)
-
 const runTasksMain = async () => {
-    await script.runTasksSynchronously(typesPokemon); // tempo de execucao 1'25'' (medido apenas uma vez)
+    await script.runTasksSynchronously(typesPokemon);
     showMenu();
 }
-
 
 const showMenu = async () => {
     console.log('\nESCOLHA UMA OPÇÃO:');
@@ -52,7 +48,7 @@ const showMenu = async () => {
         switch (option) {
             case '1':
                 const word = await menu.findPokemonByNameOrPrefix();
-                script.searchPokemonsByPrefix(word);
+                await script.searchPokemonsByPrefix(word);
                 script.logInfoPokemon();
 
                 showMenu();
@@ -89,5 +85,4 @@ const showMenu = async () => {
     });
 };
 
-// showMenu();
 runTasksMain();

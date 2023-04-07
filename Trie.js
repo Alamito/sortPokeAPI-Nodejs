@@ -94,7 +94,7 @@ class Trie {
     }
 }
 
-var trie = new Trie();
+var trie = new Trie();                                  // "Inicializa" uma variável Trie
 
 const InsertNamePokemonInTrie = (name) => {
     lineReader.eachLine('./Pokemons.bin', function (line, last) {

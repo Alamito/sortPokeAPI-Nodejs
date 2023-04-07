@@ -1,5 +1,6 @@
 const readline = require('readline');
 
+/* NECESSARIO PARA INTERACAO (INPUT) DO USUARIO */
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
@@ -35,6 +36,7 @@ const findStrongAgainstPokemon = () => {
     return new Promise(promiseCallback);
 };
 
+/* PEGA INFORMACOES PARA INSERIR NOVO POKEMON OU ALTERAR OS DADOS DE UM EXISTENTE */
 const addOrUpdateNewPokemon = () => {
     const dataPokemon = {};
     const promiseCallback = async (resolve) => {
@@ -51,6 +53,7 @@ const addOrUpdateNewPokemon = () => {
     return new Promise(promiseCallback);
 };
 
+/* TORNA A FUNCAO rl.question ASSINCRONA */
 const questionAsync = (question) => {
     return new Promise((resolve) => {
         rl.question(question, resolve);

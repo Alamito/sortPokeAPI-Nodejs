@@ -22,15 +22,54 @@ const InsertNamePokemonInTrie = () => {
     return new Promise(promiseCallback);
 };
 
-var structDataPokemon = [];
+var structDataPokemon = [];     // GUARDA OS DADOS DOS POKEMONS SOLICITADOS PARA IMPRIMIR TABULADO 
+let pokeObject = Object();      // GUARDA OS DADOS DE UM POKEMON NO OBJETO, QUE E INSERIDO NO structDataPokemon
 
-const searchPokemonsByPrefix = (prefix) => {
-    structDataPokemon = [];
-    const matches = Trie.searchPrefix(prefix.toLowerCase());
-    matches.forEach((match) => {
-        if (match === prefix) structDataPokemon.push({ NOME: match });
-        else structDataPokemon.push({ NOME: `${prefix.toLowerCase()}${match}` });
-    });
+const findPokemonDataInFile = (fullNamePokemon) => {
+    const promiseCallback = (resolve) => {
+        lineReader.eachLine(
+            './Pokemons.bin',
+            function (line) {
+                const pokemonData = line.split(';');
+                if (fullNamePokemon === pokemonData[1]) {
+                    pokeObject = {
+                        ID: pokemonData[0],
+                        NOME: fullNamePokemon,
+                        'TIPO 1': pokemonData[2],
+                        'TIPO 2': pokemonData[3],
+                        XP: pokemonData[4],
+                        ALTURA: pokemonData[5],
+                        PESO: pokemonData[6],
+                    };
+                }
+            },
+            () => {
+                resolve(true);
+            },
+        );
+    };
+    return new Promise(promiseCallback);
+};
+
+const searchPokemonsByPrefix = async (prefix) => {
+
+    const promiseCallback = async (resolve) => {
+        let fullNamePokemon = String();
+        structDataPokemon = [];
+
+        const matches = Trie.searchPrefix(prefix.toLowerCase());
+        for (let match of matches) {
+            if (match === prefix) structDataPokemon.push({ NOME: match });
+            else {
+                fullNamePokemon = prefix + match;
+                await findPokemonDataInFile(fullNamePokemon);
+                structDataPokemon.push(pokeObject);
+            }
+        }
+        resolve(true);
+    };
+
+    return new Promise(promiseCallback);
 };
 
 const readAttributesPokemon = async (dir, type) => {
@@ -104,11 +143,13 @@ const readFilePokemon = (IDs, type) => {
     return new Promise(promiseCallback);
 };
 
+/* PRINTAR DADOS TABULADOS */
 const logInfoPokemon = () => {
     console.log('---------------------------------------------------------------------------------------------------------');
     console.table(structDataPokemon);
 };
 
+/* LEITURA DO ARQUIVO QUE CONTEM O ID DO ULTIMO POKEMON */
 const readLastIdFile = () => {
     let lastID = fs.readFileSync(`./lastID.txt`);
     lastID = parseInt(lastID);
@@ -116,17 +157,17 @@ const readLastIdFile = () => {
     return lastID;
 };
 
-let pokeID = '0';
-let existePoke = false;
+let pokeID = '0';       // ARMAZENA O VALOR DO ID (SERA ATUALIZADO EM checkExistPokemon)
+let existPoke = false;  // BOOLEANO QUE VERIFICA EXISTENCIA DO POKEMON (SERA ATUALIZADO EM checkExistPokemon)
 
-const checkExistPokemon = name => {
+const checkExistPokemon = (name) => {
     const promiseCallback = async (resolve) => {
         lineReader.eachLine(
             './Pokemons.bin',
             function (line) {
                 const namePokemon = line.split(';')[1];
                 const idPokemon = line.split(';')[0];
-                if (name === namePokemon){
+                if (name === namePokemon) {
                     pokeID = idPokemon;
                     existPoke = true;
                 }
@@ -138,7 +179,7 @@ const checkExistPokemon = name => {
     };
 
     return new Promise(promiseCallback);
-} 
+};
 
 const insertNewPokemon = async (name, type1, type2, XP, height, weight) => {
     await checkExistPokemon(name);
@@ -164,8 +205,8 @@ const writeNewLastId = (ID) => {
     fs.writeFileSync('./lastID.txt', ID);
 };
 
-const MIN = 1; // id do primeiro pokemon
-const MAX = 979; // id do ultimo pokemon
+const MIN = 1; // ID DO PRIMEIRO POKEMON A SER BUSCADO
+const MAX = 979; // ID DO ULTIMO POKEMON A SER BUSCADO
 var lastIDPokemon = MAX;
 
 const runTasksSynchronously = async (typesPokemon) => {
@@ -176,18 +217,9 @@ const runTasksSynchronously = async (typesPokemon) => {
         await weakStrength.rangeGetTypeWeakness(typesPokemon);
         await weakStrength.rangeGetTypeStrength(typesPokemon);
         await checkFiles.createFileID(MAX);
-        console.log('entrou aqui');
     }
     await InsertNamePokemonInTrie();
     return new Promise((resolve) => resolve());
-};
-
-const runTasksAsynchronously = async (typesPokemon) => {
-    await checkFiles.deleteOldFiles(typesPokemon);
-    await checkFiles.createFolders();
-    pokemons.rangeGetPokemon(1, 1008);
-    weakStrength.rangeGetTypeWeakness(typesPokemon);
-    weakStrength.rangeGetTypeStrength(typesPokemon);
 };
 
 module.exports = {

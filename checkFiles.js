@@ -22,6 +22,8 @@ const typesPokemon = [
     'water',
 ];
 
+/* VERIFICA SE TODOS OS ARQUIVOS NECESSÁRIOS ESTAO PRESENTES NO DIRETORIO RAIZ */
+
 const existFiles = (typesPokemon) => {
     const promiseCallback = (resolve) => {
         if (!fs.existsSync('./Pokemons.bin')) return resolve(false);
@@ -62,6 +64,7 @@ const createFolders = () => {
     return new Promise((resolve) => resolve());
 };
 
+/* CRIA UM ARQUIVO .txt COM O ID DO ULTIMO DO ARQUIVO Pokemons.bin*/    
 const createFileID = (lastID) => {
     fs.writeFileSync('./lastID.txt', lastID.toString(), (err) => {
         if (err) throw err;
@@ -89,6 +92,8 @@ const deleteFile = (fileName, directory = '') => {
         console.error(err);
     }
 };
+
+/* DELETA ARQUIVOS ANTIGOS (SE NECESSÁRIO) PARA INSERÇÃO DE NOVOS */
 
 const deleteOldFiles = (types) => {
     checkExistFile('Pokemons') && deleteFile('Pokemons');

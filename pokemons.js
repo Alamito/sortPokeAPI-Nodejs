@@ -1,11 +1,10 @@
-/* Módulos */
 const axios = require('axios');
 const fs = require('fs');
 
 const rangeGetPokemon = async (min = 1, max = 1008) => {
     for (let idPokemon = min; idPokemon <= max; idPokemon++) {
         const URLIdPokemon = `https://pokeapi.co/api/v2/pokemon/${idPokemon}`;
-        Pokemon = await getAttributesPokemon(URLIdPokemon);
+        let Pokemon = await getAttributesPokemon(URLIdPokemon);
 
         writeFileAttributesPokemon(Pokemon);
         writeIdPokemonPerType(Pokemon.type1, Pokemon.type2, Pokemon.id);
@@ -31,6 +30,7 @@ const getAttributesPokemon = async (URL) => {
     return attributesPokemon;
 };
 
+/* VERIFICA SE O POKEMON POSSUI DOIS TIPOS */
 const existInJSONType2 = (data) => {
     try {
         return data.types[1].type.name;
