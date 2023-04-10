@@ -17,9 +17,10 @@ const findPokemonByNameOrPrefix = () => {
 };
 
 const findWeakAgainstPokemon = () => {
+    console.log('\nTIPOS DE POKÉMON: FIGHTING, FLYING, POISON, GROUND, ROCK, BUG, GHOST, STEEL, FIRE, WATER, GRASS, ELECTRIC, PSYCHIC, ICE, DRAGON, DARK, FAIRY\n');
     const promiseCallback = (resolve) => {
-        rl.question('Digite o tipo de pokémon: ', (type) => {
-            resolve(type);
+        rl.question('INSIRA O TIPO DE POKÉMON: ', (type) => {
+            resolve(type.toLocaleLowerCase());
         });
     };
 
@@ -27,9 +28,10 @@ const findWeakAgainstPokemon = () => {
 };
 
 const findStrongAgainstPokemon = () => {
+    console.log('\nTIPOS DE POKÉMON: NORMAL, FIGHTING, FLYING, POISON, GROUND, ROCK, BUG, GHOST, STEEL, FIRE, WATER, GRASS, ELECTRIC, PSYCHIC, ICE, DRAGON, DARK, FAIRY\n');
     const promiseCallback = (resolve) => {
-        rl.question('Digite o tipo de pokémon: ', (type) => {
-            resolve(type);
+        rl.question('INSIRA O TIPO DE POKÉMON: ', (type) => {
+            resolve(type.toLocaleLowerCase());
         });
     };
 

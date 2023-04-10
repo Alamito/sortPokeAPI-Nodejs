@@ -61,7 +61,13 @@ const showMenu = async () => {
                 showMenu();
                 break;
             case '3':
-                const typeWeak = await menu.findWeakAgainstPokemon();
+                let typeWeak = '';
+                do {
+                    typeWeak = await menu.findWeakAgainstPokemon();
+
+                    if (typeWeak === 'normal') console.log('\nNÃO EXISTE TIPO FRACO CONTRA NORMAL!');
+                } while (typeWeak === 'normal');
+                
                 await script.readAttributesPokemon('strengths', typeWeak);
                 script.logInfoPokemon();
                 
