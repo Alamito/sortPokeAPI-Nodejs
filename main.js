@@ -69,7 +69,7 @@ const showMenu = async () => {
                 break;
             case '4':
                 dataPokemon = await menu.addOrUpdateNewPokemon();
-                script.insertNewPokemon(dataPokemon.name, dataPokemon.type1, dataPokemon.type2, dataPokemon.XP, dataPokemon.height, dataPokemon.weight);
+                await script.insertNewPokemon(dataPokemon.name, dataPokemon.type1, dataPokemon.type2, dataPokemon.XP, dataPokemon.height, dataPokemon.weight);
 
                 showMenu();
                 break;

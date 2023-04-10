@@ -40,12 +40,13 @@ const findStrongAgainstPokemon = () => {
 const addOrUpdateNewPokemon = () => {
     const dataPokemon = {};
     const promiseCallback = async (resolve) => {
-        dataPokemon.name = await questionAsync('Insira o nome do pokémon: ');
-        dataPokemon.type1 = await questionAsync('Insira o tipo 1 do pokémon: ');
-        dataPokemon.type2 = await questionAsync('Insira o tipo 2 do pokémon (caso nao possua insira null): ');
-        dataPokemon.XP = await questionAsync('Insira o XP do pokémon: ');
-        dataPokemon.height = await questionAsync('Insira a altura do pokémon: ');
-        dataPokemon.weight = await questionAsync('Insira o peso do pokémon: ');
+        dataPokemon.name = await questionAsync('INSIRA O NOME DO POKÉMON: ');
+        console.log('\nTIPOS DE POKÉMON: NORMAL, FIGHTING, FLYING, POISON, GROUND, ROCK, BUG, GHOST, STEEL, FIRE, WATER, GRASS, ELECTRIC, PSYCHIC, ICE, DRAGON, DARK, FAIRY\n');
+        dataPokemon.type1 = await questionAsync('INSIRA O TIPO 1 DO POKÉMON: ');
+        dataPokemon.type2 = await questionAsync('INSIRA O TIPO 2 DO POKÉMON (CASO NÃO POSSUA INSIRA "NULL"): ');
+        dataPokemon.XP = await questionAsync('INSIRA A QUANTIDADE DE XP DO POKÉMON: ');
+        dataPokemon.height = await questionAsync('INSIRA A ALTURA DO POKÉMON [m]: ');
+        dataPokemon.weight = await questionAsync('INSIRA O PESO DO POKÉMON [Kg]: ');
 
         resolve(dataPokemon);
     };

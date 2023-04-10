@@ -5,6 +5,7 @@ const pokemons = require('./pokemons.js');
 const checkFiles = require('./checkFiles.js');
 const weakStrength = require('./weakStrength.js');
 const menu = require('./menu.js');
+const { Console } = require('console');
 
 const InsertNamePokemonInTrie = () => {
     const promiseCallback = (resolve) => {
@@ -184,20 +185,26 @@ const checkExistPokemon = (name) => {
 const insertNewPokemon = async (name, type1, type2, XP, height, weight) => {
     await checkExistPokemon(name);
 
-    if (pokeID === '0' && existPoke === false) {
-        lastIDPokemon = readLastIdFile() + 1;
-        writeNewLastId(lastIDPokemon);
-        const newPokemon = `${lastIDPokemon};${name};${type1};${type2};${XP};${height};${weight}\n`;
-        fs.appendFileSync('./Pokemons.bin', newPokemon);
-        Trie.insert(name);
-    } else {
-        const pokemons = fs.readFileSync('./Pokemons.bin', 'utf-8').split('\n');
-        pokemons.splice(parseInt(pokeID) - 1, 1, `${pokeID};${name};${type1};${type2};${XP};${height};${weight}`);
-        const newFile = pokemons.join('\n');
-        fs.writeFileSync('./Pokemons.bin', newFile, { encoding: 'utf-8' });
-        pokeID = '0';
-        existPoke = false;
+    const promiseCallback = async (resolve) => { 
+        if (pokeID === '0' && existPoke === false) {
+            lastIDPokemon = readLastIdFile() + 1;
+            writeNewLastId(lastIDPokemon);
+            const newPokemon = `${lastIDPokemon};${name};${type1};${type2};${XP};${height};${weight}\n`;
+            fs.appendFileSync('./Pokemons.bin', newPokemon);
+            Trie.insert(name);
+            console.log('\nPOKEMON INSERIDO COM SUCESSO!\n');
+        } else {
+            const pokemons = fs.readFileSync('./Pokemons.bin', 'utf-8').split('\n');
+            pokemons.splice(parseInt(pokeID) - 1, 1, `${pokeID};${name};${type1};${type2};${XP};${height};${weight}`);
+            const newFile = pokemons.join('\n');
+            fs.writeFileSync('./Pokemons.bin', newFile, { encoding: 'utf-8' });
+            pokeID = '0';
+            existPoke = false;
+            console.log('\nPOKEMON ATUALIZADO COM SUCESSO!\n');
+        }
+        resolve(true);
     }
+    return new Promise(promiseCallback);
 };
 
 const writeNewLastId = (ID) => {
@@ -224,7 +231,6 @@ const runTasksSynchronously = async (typesPokemon) => {
 
 module.exports = {
     runTasksSynchronously,
-    runTasksAsynchronously,
     searchPokemonsByPrefix,
     insertNewPokemon,
     readAttributesPokemon,
