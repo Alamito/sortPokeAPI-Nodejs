@@ -57,10 +57,14 @@ const searchPokemonsByPrefix = async (prefix) => {
     const promiseCallback = async (resolve) => {
         let fullNamePokemon = String();
         structDataPokemon = [];
+        pokeObject = [];
 
         const matches = Trie.searchPrefix(prefix.toLowerCase());
         for (let match of matches) {
-            if (match === prefix) structDataPokemon.push({ NOME: match });
+            if (match === prefix) {
+                await findPokemonDataInFile(match);
+                structDataPokemon.push(pokeObject);
+            }
             else {
                 fullNamePokemon = prefix + match;
                 await findPokemonDataInFile(fullNamePokemon);
