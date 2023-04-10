@@ -39,8 +39,8 @@ const findPokemonDataInFile = (fullNamePokemon) => {
                         'TIPO 1': pokemonData[2],
                         'TIPO 2': pokemonData[3],
                         XP: pokemonData[4],
-                        ALTURA: pokemonData[5],
-                        PESO: pokemonData[6],
+                        'ALTURA [m]': pokemonData[5],
+                        'PESO [Kg]': pokemonData[6],
                     };
                 }
             },
