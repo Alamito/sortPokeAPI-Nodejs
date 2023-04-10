@@ -105,6 +105,7 @@ const searchIdPokemonByType = async (types, searchType) => {
             data = data.trim().split('\n');
             data.forEach((index) => {
                 IDsPokemon.push(index);
+                // console.log(index);
             });
         }
         await getPokemonNameById(IDsPokemon, searchType);
@@ -127,7 +128,7 @@ const readFilePokemon = (IDs, type) => {
     structDataPokemon = [];
     const promiseCallback = async (resolve) => {
         console.log('CARREGANDO...');
-        for (let i = 0; i < IDs.length; i++) {
+        for (let i = 0; i < IDs.length+1; i++) {
             lineReader.eachLine('./Pokemons.bin', function (line, last) {
                 const idFile = line.split(';')[0];
                 const type1 = line.split(';')[2];
@@ -138,10 +139,11 @@ const readFilePokemon = (IDs, type) => {
                 if (idFile === IDs[i] && type1 !== type && type2 !== type) {
                     const pokemonName = line.split(';')[1];
                     structDataPokemon.push({ ID: idFile, NOME: pokemonName, 'TIPO 1': type1, 'TIPO 2': type2, XP, 'ALTURA [m]': height, 'PESO [Kg]': weight });
+                    if (last) {
+                        resolve(true);
+                    }
                 }
-                if (last) {
-                    resolve(true);
-                }
+                
             });
         }
     };
@@ -195,6 +197,7 @@ const insertNewPokemon = async (name, type1, type2, XP, height, weight) => {
             writeNewLastId(lastIDPokemon);
             const newPokemon = `${lastIDPokemon};${name};${type1};${type2};${XP};${height};${weight}\n`;
             fs.appendFileSync('./Pokemons.bin', newPokemon);
+            pokemons.writeIdInFile(type1, type2, lastIDPokemon);
             Trie.insert(name);
             console.log('\nPOKEMON INSERIDO COM SUCESSO!\n');
         } else {
