@@ -139,11 +139,8 @@ const readFilePokemon = (IDs, type) => {
                 if (idFile === IDs[i] && type1 !== type && type2 !== type) {
                     const pokemonName = line.split(';')[1];
                     structDataPokemon.push({ ID: idFile, NOME: pokemonName, 'TIPO 1': type1, 'TIPO 2': type2, XP, 'ALTURA [m]': height, 'PESO [Kg]': weight });
-                    if (last) {
-                        resolve(true);
-                    }
                 }
-                
+                if (last && IDs.length) resolve(true);
             });
         }
     };
