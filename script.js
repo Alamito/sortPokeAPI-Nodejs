@@ -126,25 +126,6 @@ const readFilePokemon = (IDs, type) => {
     structDataPokemon = [];
     const promiseCallback = async (resolve) => {
         console.log('CARREGANDO...');
-        let i;
-        // for (i = 0; i < IDs.length; i++) {
-        //     lineReader.eachLine('./Pokemons.bin', async function (line, last) {
-        //         const idFile = line.split(';')[0];
-        //         const type1 = line.split(';')[2];
-        //         const type2 = line.split(';')[3];
-        //         const XP = line.split(';')[4];
-        //         const height = line.split(';')[5];
-        //         const weight = line.split(';')[6];
-        //         await storePokemonData(idFile, IDs, type1, type2, type, XP, height, weight, i, line);
-        //         if (last) {
-        //             resolve(true);
-        //             return;
-        //         }
-        //     });
-        //     if (i === IDs.length - 1) {
-        //         resolve(true);
-        //     }
-        // }
         const fileContents = fs.readFileSync('./Pokemons.bin', 'utf-8');
         const lines = fileContents.split('\n');
 
@@ -174,11 +155,6 @@ const storePokemonData = (IDs, idFile, pokemonName, type1, type2, type, XP, heig
             }
             resolve(true);
         }
-        // if (idFile === IDs[index] && type1 !== type && type2 !== type) {
-        //     console.log('ENTROU');
-        //     structDataPokemon.push({ ID: idFile, NOME: pokemonName, 'TIPO 1': type1, 'TIPO 2': type2, XP, 'ALTURA [m]': height, 'PESO [Kg]': weight });
-        // }
-        // resolve(true);
     };
     return new Promise(promiseCallback);
 };
@@ -253,7 +229,7 @@ const writeNewLastId = (ID) => {
 };
 
 const MIN = 1; // ID DO PRIMEIRO POKEMON A SER BUSCADO
-const MAX = 979; // ID DO ULTIMO POKEMON A SER BUSCADO
+const MAX = 1008; // ID DO ULTIMO POKEMON A SER BUSCADO
 var lastIDPokemon = MAX;
 
 const runTasksSynchronously = async (typesPokemon) => {
