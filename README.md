@@ -1,5 +1,5 @@
-# Classificação e Pesquisa de Pokémons
-[![NPM](https://img.shields.io/github/license/Alamito/Cromai-TeoPitagoras-Python-WEB)](https://github.com/Alamito/Cromai-TeoPitagoras-Python-WEB/blob/main/LICENSE)
+# 🐭 Classificação e Pesquisa de Pokémons 🐍
+[![NPM](https://img.shields.io/github/license/Alamito/sortPokeAPI-Nodejs)](https://github.com/Alamito/sortPokeAPI-Nodejs/blob/main/LICENSE)
 
 # 📜 Sobre o projeto 📜
 <p align="justify">
